@@ -1,4 +1,6 @@
-# Demo kit — "You have API credentials, now what?"
+# "You have API credentials, now what?"
+
+**[The slides (PDF)](talk.pdf)** — plus everything below that produced them.
 
 Everything needed to capture the deck frames. Anthropic Messages API
 (`POST /v1/messages`) — matches the abstract and the slide field names
