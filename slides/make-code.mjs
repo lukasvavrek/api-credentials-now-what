@@ -27,20 +27,21 @@ const fs = Math.min(
   Math.floor(1700 / (Math.max(...code.map(l => l.length)) * 0.602)));
 
 const render = (id, highlight) => {
-  const body = code.map(l => {
+  const body = code.map((l, i) => {
     const hl = highlight && SKELETON.some(s => l.includes(s));
-    return `<div class="${hl ? "hl" : ""}">${esc(l) || "&nbsp;"}</div>`;
+    return `<div class="${hl ? "hl" : ""}"><span class="ln">${String(i + 1).padStart(2)}</span>${esc(l) || "&nbsp;"}</div>`;
   }).join("");
   const tmp = join(here, `.tmp-${id}.html`);
   writeFileSync(tmp, `<!doctype html><meta charset="utf-8"><style>
     * { margin: 0; box-sizing: border-box; }
     body { width: 1920px; height: 1080px; display: flex; align-items: center;
            justify-content: center; background: transparent; }
-    .card { width: max-content; max-width: 1820px; background: #fbfaf7; border: 2px solid #d8d4cc;
+    .card { width: 1820px; background: #fbfaf7; border: 2px solid #d8d4cc;
             border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,.16);
             padding: 36px 56px; }
     .card div { font: ${fs}px/1.5 "SF Mono", Menlo, monospace;
                 color: ${highlight ? "#8a857c" : "#1a1916"}; white-space: pre; }
+    .card .ln { color: #c9c4ba; font-weight: 400; margin-right: 28px; user-select: none; }
     .card div.hl { color: #1a1916; font-weight: 700; background: #fff3bf;
                    border-radius: 4px; }
   </style><body><div class="card">${body}</div></body>`);
