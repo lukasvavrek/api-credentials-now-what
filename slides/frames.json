@@ -1,0 +1,638 @@
+[
+  {
+    "id": "s6-chat-def",
+    "lines": [
+      [
+        "cmd",
+        "chat() {"
+      ],
+      [
+        "cont",
+        "  curl -s https://api.anthropic.com/v1/messages \\"
+      ],
+      [
+        "cont",
+        "    -H \"x-api-key: $ANTHROPIC_API_KEY\" \\"
+      ],
+      [
+        "cont",
+        "    -H \"anthropic-version: 2023-06-01\" \\"
+      ],
+      [
+        "cont",
+        "    -d \"{\\\"model\\\": \\\"$MODEL\\\", \\\"max_tokens\\\": 256, \\\"messages\\\": $1}\" \\"
+      ],
+      [
+        "cont",
+        "    | jq -r '.content[] | select(.type==\"text\") | .text'"
+      ],
+      [
+        "cont",
+        "}"
+      ]
+    ]
+  },
+  {
+    "id": "s2-cmd",
+    "lines": [
+      [
+        "cmd",
+        "chat \"Hi! My name is Lukas.\""
+      ]
+    ]
+  },
+  {
+    "id": "s2-full",
+    "lines": [
+      [
+        "cmd",
+        "chat \"Hi! My name is Lukas.\""
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "out",
+        "Hi Lukas, nice to meet you — what can I"
+      ],
+      [
+        "out",
+        "help you with?"
+      ]
+    ]
+  },
+  {
+    "id": "s3-cmd",
+    "lines": [
+      [
+        "cmd",
+        "chat \"What is my name?\"   # fresh request"
+      ]
+    ]
+  },
+  {
+    "id": "s3-full",
+    "lines": [
+      [
+        "cmd",
+        "chat \"What is my name?\"   # fresh request"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "out",
+        "I don't know your name — you haven't told"
+      ],
+      [
+        "out",
+        "me, and I don't have access to any personal"
+      ],
+      [
+        "out",
+        "information about you."
+      ]
+    ]
+  },
+  {
+    "id": "s4-cmd",
+    "lines": [
+      [
+        "cmd",
+        "chat '["
+      ],
+      [
+        "hl",
+        "  {\"role\":\"user\",      \"content\":\"Hi! My name is Lukas.\"},"
+      ],
+      [
+        "hl",
+        "  {\"role\":\"assistant\", \"content\":\"Hi Lukas, nice to meet"
+      ],
+      [
+        "hl",
+        "                        you — what can I help you with?\"},"
+      ],
+      [
+        "cont",
+        "  {\"role\":\"user\",      \"content\":\"What is my name?\"} ]'"
+      ]
+    ]
+  },
+  {
+    "id": "s4-full",
+    "lines": [
+      [
+        "cmd",
+        "chat '["
+      ],
+      [
+        "hl",
+        "  {\"role\":\"user\",      \"content\":\"Hi! My name is Lukas.\"},"
+      ],
+      [
+        "hl",
+        "  {\"role\":\"assistant\", \"content\":\"Hi Lukas, nice to meet"
+      ],
+      [
+        "hl",
+        "                        you — what can I help you with?\"},"
+      ],
+      [
+        "cont",
+        "  {\"role\":\"user\",      \"content\":\"What is my name?\"} ]'"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "out",
+        "Your name is Lukas."
+      ]
+    ]
+  },
+  {
+    "id": "s6-request-min",
+    "lines": [
+      [
+        "cmd",
+        "POST https://api.anthropic.com/v1/messages"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "{"
+      ],
+      [
+        "cont",
+        "  \"model\":      \"claude-opus-5\","
+      ],
+      [
+        "cont",
+        "  \"max_tokens\": 1024,"
+      ],
+      [
+        "cont",
+        "  \"messages\":   ["
+      ],
+      [
+        "cont",
+        "    {\"role\": \"user\", \"content\": \"What is in config.py?\"}"
+      ],
+      [
+        "cont",
+        "  ]"
+      ],
+      [
+        "cont",
+        "}"
+      ]
+    ]
+  },
+  {
+    "id": "s6-request-tools",
+    "lines": [
+      [
+        "cmd",
+        "POST https://api.anthropic.com/v1/messages"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "{"
+      ],
+      [
+        "cont",
+        "  \"model\":      \"claude-opus-5\","
+      ],
+      [
+        "cont",
+        "  \"max_tokens\": 1024,"
+      ],
+      [
+        "hl",
+        "  \"tools\": [{"
+      ],
+      [
+        "hl",
+        "    \"name\":         \"read_file\","
+      ],
+      [
+        "hl",
+        "    \"description\":  \"Read a file from disk\","
+      ],
+      [
+        "hl",
+        "    \"input_schema\": { \"path\": \"string\" }"
+      ],
+      [
+        "hl",
+        "  }],"
+      ],
+      [
+        "cont",
+        "  \"messages\":   ["
+      ],
+      [
+        "cont",
+        "    {\"role\": \"user\", \"content\": \"What is in config.py?\"}"
+      ],
+      [
+        "cont",
+        "  ]"
+      ],
+      [
+        "cont",
+        "}"
+      ]
+    ]
+  },
+  {
+    "id": "s7-send",
+    "lines": [
+      [
+        "cmd",
+        "ask \"What is in config.py?\"   (tools: [read_file])"
+      ]
+    ]
+  },
+  {
+    "id": "s8-hold",
+    "lines": [
+      [
+        "cmd",
+        "ask \"What is in config.py?\"   (tools: [read_file])"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "{"
+      ],
+      [
+        "hl",
+        "  \"stop_reason\": \"tool_use\","
+      ],
+      [
+        "cont",
+        "  \"tool_use\": [{"
+      ],
+      [
+        "cont",
+        "     \"name\":  \"read_file\","
+      ],
+      [
+        "cont",
+        "     \"input\": { \"path\": \"config.py\" }"
+      ],
+      [
+        "cont",
+        "  }]"
+      ],
+      [
+        "cont",
+        "}"
+      ]
+    ]
+  },
+  {
+    "id": "s9-runtime",
+    "lines": [
+      [
+        "cmd",
+        "cat config.py          # I am the runtime"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "respone_timeout = 30  # planted bug: misspelled name"
+      ],
+      [
+        "cont",
+        ""
+      ],
+      [
+        "cont",
+        "def get_timeout():"
+      ],
+      [
+        "cont",
+        "    return response_timeout"
+      ]
+    ]
+  },
+  {
+    "id": "s10-result",
+    "lines": [
+      [
+        "cmd",
+        "resend the WHOLE conversation, plus the favor:"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "\"messages\": ["
+      ],
+      [
+        "cont",
+        "  {\"role\": \"user\",      \"content\": \"What is in config.py?\"},"
+      ],
+      [
+        "cont",
+        "  {\"role\": \"assistant\", \"content\": [ tool_use: read_file ]},"
+      ],
+      [
+        "hl",
+        "  {\"role\": \"user\",      \"content\": [{"
+      ],
+      [
+        "hl",
+        "     \"type\": \"tool_result\","
+      ],
+      [
+        "hl",
+        "     \"tool_use_id\": \"toolu_01A...\","
+      ],
+      [
+        "hl",
+        "     \"content\": \"respone_timeout = 30 ...\"}]}"
+      ],
+      [
+        "cont",
+        "]"
+      ]
+    ]
+  },
+  {
+    "id": "s11-answer",
+    "lines": [
+      [
+        "cmd",
+        "resend conversation + tool_result"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "stop_reason: \"end_turn\""
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "out",
+        "config.py defines a timeout setting and a"
+      ],
+      [
+        "out",
+        "get_timeout() function, but contains a bug: the"
+      ],
+      [
+        "out",
+        "variable is misspelled as respone_timeout while"
+      ],
+      [
+        "out",
+        "get_timeout() references response_timeout, so"
+      ],
+      [
+        "out",
+        "calling it raises a NameError."
+      ]
+    ]
+  },
+  {
+    "id": "s12-cmd",
+    "lines": [
+      [
+        "cmd",
+        "ask \"Deploy to production.\"  (tools: [deploy_to_production])"
+      ]
+    ]
+  },
+  {
+    "id": "s12-full",
+    "lines": [
+      [
+        "cmd",
+        "ask \"Deploy to production.\"  (tools: [deploy_to_production])"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "{"
+      ],
+      [
+        "cont",
+        "  \"stop_reason\": \"tool_use\","
+      ],
+      [
+        "hl",
+        "  \"tool_use\": [{ \"name\":  \"deploy_to_production\","
+      ],
+      [
+        "hl",
+        "                  \"input\": { \"confirm\": true } }]"
+      ],
+      [
+        "cont",
+        "}"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "out",
+        "Nothing happened."
+      ]
+    ]
+  },
+  {
+    "id": "s16-run1",
+    "lines": [
+      [
+        "cmd",
+        "python agent.py \"make the tests pass\""
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "--- turn 1 (input_tokens=479)"
+      ],
+      [
+        "cont",
+        "    bash({'command': 'pytest'})"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "out",
+        "FAILED test_config.py::test_timeout_is_thirty_seconds"
+      ],
+      [
+        "out",
+        "NameError: name 'response_timeout' is not defined"
+      ],
+      [
+        "out",
+        "1 failed in 0.01s"
+      ]
+    ]
+  },
+  {
+    "id": "s17-fix",
+    "lines": [
+      [
+        "cont",
+        "--- turn 2 (input_tokens=1297)"
+      ],
+      [
+        "cont",
+        "    read_file({'path': 'config.py'})"
+      ],
+      [
+        "cont",
+        "    read_file({'path': 'test_config.py'})"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "--- turn 3 (input_tokens=1538)"
+      ],
+      [
+        "cont",
+        "    bash({'command': \"cat > config.py <<'EOF'"
+      ],
+      [
+        "hl",
+        "response_timeout = 30"
+      ],
+      [
+        "cont",
+        ""
+      ],
+      [
+        "cont",
+        "def get_timeout():"
+      ],
+      [
+        "cont",
+        "    return response_timeout"
+      ],
+      [
+        "cont",
+        "EOF\"})"
+      ]
+    ]
+  },
+  {
+    "id": "s18-green",
+    "lines": [
+      [
+        "cont",
+        "--- turn 4 (input_tokens=1743)"
+      ],
+      [
+        "cont",
+        "    bash({'command': 'pytest'})"
+      ],
+      [
+        "out",
+        "1 passed in 0.01s"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "--- turn 5 (input_tokens=1980)"
+      ],
+      [
+        "out",
+        "Tests pass now. ✅  config.py defined the variable as"
+      ],
+      [
+        "out",
+        "respone_timeout but get_timeout() returned"
+      ],
+      [
+        "out",
+        "response_timeout, causing a NameError. Renamed it."
+      ]
+    ]
+  },
+  {
+    "id": "s19-receipts",
+    "lines": [
+      [
+        "cmd",
+        "what actually goes over the wire"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "cont",
+        "              agent.py          Claude Code"
+      ],
+      [
+        "cont",
+        "              ────────          ───────────"
+      ],
+      [
+        "cont",
+        "tools    :    2                 28"
+      ],
+      [
+        "cont",
+        "system   :    68 chars          27,432 chars"
+      ],
+      [
+        "cont",
+        "loop     :    42 lines          the same loop"
+      ],
+      [
+        "gap",
+        ""
+      ],
+      [
+        "out",
+        "Same endpoint. Same protocol. Same loop."
+      ]
+    ]
+  }
+]
