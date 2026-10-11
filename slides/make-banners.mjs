@@ -16,7 +16,7 @@ const banners = [
 ];
 
 for (const b of banners) {
-  const fs = Math.max(48, Math.min(96, Math.floor(1400 / (b.text.length * 0.602))));
+  const fs = Math.max(48, Math.min(96, Math.floor(1000 / (b.text.length * 0.602))));
   const tmp = join(here, `.tmp-${b.id}.html`);
   writeFileSync(tmp, `<!doctype html><meta charset="utf-8"><style>
     * { margin: 0; }

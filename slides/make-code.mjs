@@ -36,7 +36,7 @@ const render = (id, highlight) => {
     * { margin: 0; box-sizing: border-box; }
     body { width: 1920px; height: 1080px; display: flex; align-items: center;
            justify-content: center; background: transparent; }
-    .card { width: 1820px; background: #fbfaf7; border: 2px solid #d8d4cc;
+    .card { width: max-content; max-width: 1820px; background: #fbfaf7; border: 2px solid #d8d4cc;
             border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,.16);
             padding: 36px 56px; }
     .card div { font: ${fs}px/1.5 "SF Mono", Menlo, monospace;
